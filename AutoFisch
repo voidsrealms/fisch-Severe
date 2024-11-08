@@ -17,18 +17,19 @@ local function getCasting()
 end
 
 local function Shake()
+    local hashPressed = false  -- Track if we've pressed # key
+
     while true do
         local PlayerGui = game.Players.localPlayer:FindFirstChild("PlayerGui")
         if PlayerGui then
             local shakeui = PlayerGui:FindFirstChild("shakeui")
-            local backslashpressed = false
             if shakeui then
-                if not backslashpressed then
-                    -- Press and release the \ key with a delay
-                    keypress(0xDC)  -- \ key
-                    wait(0.1)  -- Give it time to register
-                    keyrelease(0xDC)  -- Release \ key
-                    backslashpressed = true
+                -- Ensure that # key is pressed only once
+                if not hashPressed then
+                    keypress(0xB3)  -- Press the # key (0xB3 keycode)
+                    wait(0.1)  -- Wait for it to register
+                    keyrelease(0xB3)  -- Release the # key
+                    hashPressed = true  -- Mark as pressed
                 end
                 
                 -- Press the S key for shake action
@@ -39,10 +40,13 @@ local function Shake()
                 keypress(0x0D)    -- Enter key
                 keyrelease(0x0D)
                 
-                wait(0.01)
+                wait(0.01)  -- Small wait before the next loop iteration
+            else
+                -- If shake UI is not present, reset the # press flag
+                hashPressed = false
             end
         end
-        wait()
+        wait()  -- Wait before continuing the loop
     end
 end
 
