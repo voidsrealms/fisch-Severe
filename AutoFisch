@@ -17,38 +17,43 @@ local function getCasting()
 end
 
 local function Shake()
-    local hashPressed = false  -- Track if we've pressed # key
+    local backslashpressed = false  -- Track if the backslash key was pressed
 
     while true do
         local PlayerGui = game.Players.localPlayer:FindFirstChild("PlayerGui")
         if PlayerGui then
             local shakeui = PlayerGui:FindFirstChild("shakeui")
             if shakeui then
-                -- Ensure that # key is pressed only once
-                if not hashPressed then
-                    keypress(0xB3)  -- Press the # key (0xB3 keycode)
-                    wait(0.1)  -- Wait for it to register
-                    keyrelease(0xB3)  -- Release the # key
-                    hashPressed = true  -- Mark as pressed
+                -- Only press backslash if it hasn't been pressed already
+                if not backslashpressed then
+                    print("Activating UI navigation with backslash key")
+                    keypress(0xDC)  -- Press the backslash key (0xDC keycode)
+                    wait(0.1)       -- Wait for it to register
+                    keyrelease(0xDC)  -- Release the backslash key
+                    backslashpressed = true  -- Mark as pressed
                 end
-                
+
                 -- Press the S key for shake action
                 keypress(0x53)    -- S key (shake)
                 keyrelease(0x53)
-                
+
                 -- Press Enter key to confirm
                 keypress(0x0D)    -- Enter key
                 keyrelease(0x0D)
-                
+
                 wait(0.01)  -- Small wait before the next loop iteration
             else
-                -- If shake UI is not present, reset the # press flag
-                hashPressed = false
+                -- If shake UI is not present, reset the backslash press flag
+                if backslashpressed then
+                    keyrelease(0xDC)  -- Ensure backslash is released
+                    backslashpressed = false
+                end
             end
         end
         wait()  -- Wait before continuing the loop
     end
 end
+
 
 local function Reeling()
     local cached = tick() 
